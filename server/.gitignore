@@ -1,0 +1,7 @@
+
+/node_modules/.bin/
+/.idea/
+
+# Ignore compiled .js files with the exception of gulpfile.js
+*.js
+!gulpfile.js
