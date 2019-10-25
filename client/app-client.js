@@ -9,6 +9,8 @@ import { encrypt as caesarEncrypt, decrypt as caesarDecrypt } from 'caesar-encry
 import xor from 'buffer-xor'
 import bigInt from 'big-integer';
 
+const SERVER_URL = process.env.SERVER_URL || "localhost:8080";
+
 class App extends Component {
 
   constructor() {
@@ -22,7 +24,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.socket = new WebSocket('ws://localhost:8080');
+    this.socket = new WebSocket(`ws://${SERVER_URL}`);
     this.socket.onopen = () => this.onSocketOpen();
     this.socket.onmessage = (msg) => this.onSocketMessage(msg);
     this.socket.onclose = () => this.onSocketClose();
