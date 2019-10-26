@@ -94,7 +94,7 @@ module.exports = function (wss: any) {
         try {
             let msg_obj = JSON.parse(message);
             broadcastToUsers(id, msg_obj);
-        } catch(e: any) {
+        } catch(e) {
             console.log(e);
         }
     }

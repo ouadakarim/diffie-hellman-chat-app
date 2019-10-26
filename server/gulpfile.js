@@ -2,16 +2,9 @@ var gulp = require('gulp');
 var ts = require('gulp-typescript');
 var clean = require('gulp-clean');
 var server = require('gulp-develop-server');
-var mocha = require('gulp-mocha');
 
 var serverTS = ["**/*.ts", "!node_modules/**", '!bin/**'];
 
-gulp.task('ts', ['clean'], function() {
-    return gulp
-        .src(serverTS, {base: './'})
-        .pipe(ts({ module: 'commonjs', noImplicitAny: true }))
-        .pipe(gulp.dest('./'));
-});
 
 gulp.task('clean', function () {
     return gulp
@@ -24,33 +17,26 @@ gulp.task('clean', function () {
             '!bin/**',
             '!models/**',
             '!config/**',
-        ], {read: false})
+        ], {read: false, allowEmpty: true})
         .pipe(clean())
 });
 
-gulp.task('server:start', ['ts'], function() {
+gulp.task('ts', gulp.series('clean', function() {
+    return gulp
+        .src(serverTS, {base: './'})
+        .pipe(ts({ module: 'commonjs' }))
+        .pipe(gulp.dest('./'));
+}));
+
+gulp.task('server:start', gulp.series('ts', function() {
     server.listen({path: 'app'}, function(error) {
     });
-});
+}));
 
-gulp.task('server:restart', ['ts'], function() {
+gulp.task('server:restart', gulp.series('ts', function() {
     server.restart();
-});
+}));
 
-gulp.task('default', ['server:start'], function() {
+gulp.task('default', gulp.series('server:start', function() {
     gulp.watch(serverTS, ['server:restart']);
-});
-
-gulp.task('test', ['ts', 'load:fixtures'], function() {
-    return gulp
-        .src('test/*.js', {read: false})
-        // wait for dev server to start properly :(
-        //.pipe(wait(600))
-        .pipe(mocha())
-        .once('error', function () {
-            process.exit(1);
-        })
-        .once('end', function () {
-            process.exit();
-        });
-});
+}));
