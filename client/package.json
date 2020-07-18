@@ -16,7 +16,7 @@
     "caesar-encrypt": "0.0.2",
     "cosmicjs": "^2.0.0",
     "express": "^4.13.3",
-    "lodash": "^4.0.0",
+    "lodash": "^4.17.19",
     "node-uuid": "^1.4.7",
     "react": "^0.14.1",
     "react-bootstrap": "^0.28.2",
